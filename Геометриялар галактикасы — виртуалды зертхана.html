@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="kk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Геометриялар галактикасы — виртуалды зертхана</title>
+<style>
+:root{--bg:#f4f3ff;--fg:#1d1b3a;--mut:#5d5a80;--card:#fff;--ln:#d8d5f0;--e:#2563eb;--h:#9333ea;--s:#059669;--tri:rgba(245,158,11,.25);--acc:#d97706;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0c1f;--fg:#ecebff;--mut:#a9a6cf;--card:#171534;--ln:#2e2b5a;--e:#3b82f6;--h:#a855f7;--s:#10b981;--tri:rgba(251,191,36,.25);--acc:#d97706}}
+:root[data-theme="dark"]{--bg:#0d0c1f;--fg:#ecebff;--mut:#a9a6cf;--card:#171534;--ln:#2e2b5a;--e:#3b82f6;--h:#a855f7;--s:#10b981;--tri:rgba(251,191,36,.25);--acc:#d97706}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1000px;margin:auto;padding:18px 16px 40px}
+h1{font-size:clamp(24px,5.5vw,38px);margin:.1em 0;line-height:1.15;background:linear-gradient(90deg,var(--e),var(--h),var(--s));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:20px;margin:26px 0 10px}
+.sub{color:var(--mut);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px 16px}
+ol{margin:6px 0 0;padding-left:22px}li{margin:4px 0}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 10px;align-items:center}
+button{font:inherit;cursor:pointer;border:1px solid var(--ln);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px}
+button.on{color:#fff;border-color:transparent}
+button[data-w=e].on{background:var(--e)}button[data-w=h].on{background:var(--h)}button[data-w=s].on{background:var(--s)}button[data-m].on{background:var(--acc)}
+.sep{width:1px;height:26px;background:var(--ln);margin:0 4px}
+.lab{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:820px){.lab{grid-template-columns:minmax(0,560px) minmax(0,1fr)}}
+canvas{display:block;touch-action:none;cursor:grab;margin:auto}
+.hint{font-size:13px;color:var(--mut);text-align:center;margin:6px 0 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{border:1px solid var(--ln);border-radius:12px;padding:6px 12px;font-weight:600}
+.sum{font-size:32px;font-weight:700;margin:4px 0}
+.verdict{font-weight:600}
+.small{font-size:14px;color:var(--mut)}
+.story{margin-top:10px;padding-top:10px;border-top:1px dashed var(--ln);font-size:15px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{border:1px solid var(--ln);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:rgba(127,127,160,.12)}
+td.on,th.on{background:rgba(245,158,11,.18)}
+.m{font-weight:700}
+.grid4{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+input[type=range]{width:100%;accent-color:var(--acc)}
+.hide{display:none}
+</style></head><body><div class="w">
+<h1>🌌 Геометриялар галактикасы</h1>
+<p class="sub">Практикалық тапсырма: виртуалды зертхана. Евклидтік, гиперболалық және эллипстік (сфералық) геометрияларды өзің сынап көр.</p>
+
+<div class="card"><b>🚀 Миссия: сен — геометрия ғарышкерісің</b>
+<ol>
+<li><b>Евклид планетасы:</b> A, B, C төбелерін сүйреп, бұрыштар қосындысын жаз.</li>
+<li><b>Лобачевский планетасы:</b> үшбұрышты дискінің шетіне қарай жылжытып, қосындының қалай өзгеретінін бақыла.</li>
+<li><b>Риман планетасы:</b> глобусты айналдыр, үлкен шеңбер доғаларынан тұратын үшбұрышты өлше. «Сегіздік үшбұрыш» батырмасын бас: бұрыштары 90°+90°+90°.</li>
+<li><b>Параллель іздеу:</b> «Параллель» режимінде слайдермен P нүктесінен өтетін түзуді бұр, оның l түзуімен қиылысуын тексер.</li>
+<li>Төмендегі <b>кестеге</b> қорытынды жаз.</li>
+</ol></div>
+
+<div class="tabs">
+<button data-w="e" class="on">🟦 Евклид</button><button data-w="h">🟣 Лобачевский–Бойяи</button><button data-w="s">🟢 Риман</button>
+<span class="sep"></span>
+<button data-m="t" class="on">△ Үшбұрыш</button><button data-m="p">∥ Параллель</button>
+</div>
+
+<div class="lab">
+<div class="card"><canvas id="cv"></canvas>
+<p class="hint" id="hint"></p>
+<div id="sl" class="hide"><label class="small">P нүктесінен өтетін m түзуінің бағыты: <b id="thv"></b></label><input type="range" id="th" min="0" max="180" step="0.5" value="40"></div>
+<div class="tabs" style="margin-bottom:0"><button id="reset">↺ Қайта бастау</button><button id="oct" class="hide">🍊 Сегіздік үшбұрыш</button></div></div>
+<div class="card"><div id="read"></div><div class="story" id="story"></div></div>
+</div>
+
+<h2>📋 Салыстыру кестесі</h2>
+<div class="card tw"><table>
+<tr><th></th><th data-w="e">Евклид</th><th data-w="h">Лобачевский–Бойяи (гиперболалық)</th><th data-w="s">Риман (эллипстік / сфералық)</th></tr>
+<tr><th>Модель</th><td data-w="e">жазықтық</td><td data-w="h">Пуанкаре дискі, ершік тәрізді бет</td><td data-w="s">сфера</td></tr>
+<tr><th>«Түзу»</th><td data-w="e">кәдімгі түзу</td><td data-w="h">шекара шеңберіне перпендикуляр доға</td><td data-w="s">үлкен шеңбер</td></tr>
+<tr><th>Қисықтық K</th><td data-w="e">K = 0</td><td data-w="h">K &lt; 0</td><td data-w="s">K &gt; 0</td></tr>
+<tr><th>l түзуінен тыс P нүктесі арқылы параллельдер</th><td data-w="e">тек біреу</td><td data-w="h">шексіз көп</td><td data-w="s">жоқ (кез келген екі түзу қиылысады)</td></tr>
+<tr><th>Үшбұрыш бұрыштарының қосындысы</th><td data-w="e">= 180°</td><td data-w="h">&lt; 180°</td><td data-w="s">&gt; 180°</td></tr>
+<tr><th>Сенің өлшемің</th><td data-w="e" class="m" id="m-e">—</td><td data-w="h" class="m" id="m-h">—</td><td data-w="s" class="m" id="m-s">—</td></tr>
+</table></div>
+
+<h2>🧠 Математикалық дүниетанымға әсері</h2>
+<div class="grid4">
+<div class="card"><b>Аксиома — қағида емес</b><br><span class="small">Евклидтің 5-постулатын өзгерткенде жаңа, қайшылықсыз геометрия пайда болды. Аксиомалар — таңдау.</span></div>
+<div class="card"><b>«Шындық» көп</b><br><span class="small">Математикалық ақиқат жүйеге байланысты: бір жүйеде 180° — екіншісінде 237°.</span></div>
+<div class="card"><b>Қисық кеңістік</b><br><span class="small">Риман идеясы Эйнштейннің жалпы салыстырмалылық теориясына негіз болды: ауырлық — кеңістік қисықтығы.</span></div>
+<div class="card"><b>Күнделікті өмір</b><br><span class="small">Жер бетінде ұшақ маршруты — үлкен шеңбер доғасы. GPS есептеулері де қисық геометрияны ескереді.</span></div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id),cv=$('cv'),ctx=cv.getContext('2d'),D=Math.PI/180;
+const V=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let S=400,k=180,cx=200,cy=200,dpr=1,world='e',mode='t',drag=-1,rotating=false,lx=0,ly=0,yaw=0,tilt=.35,th=40,C={},res={};
+const Eu0=[[-.6,.45],[.65,.3],[-.1,-.55]],Hy0=[[-.7,.35],[.7,.3],[0,-.7]];
+const ll=(lo,la)=>[Math.cos(la*D)*Math.sin(lo*D),Math.sin(la*D),Math.cos(la*D)*Math.cos(lo*D)];
+const Sp0=()=>[ll(-35,15),ll(40,10),ll(5,60)];
+let Eu=Eu0.map(a=>a.slice()),Hy=Hy0.map(a=>a.slice()),Sp=Sp0();
+const meas={};
+const T=p=>[cx+k*p[0],cy-k*p[1]],U=(X,Y)=>[(X-cx)/k,-(Y-cy)/k];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],cr=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const cl=x=>Math.max(-1,Math.min(1,x)),nm=a=>((a%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+const rot3=p=>{let c=Math.cos(yaw),s=Math.sin(yaw);const x=p[0]*c+p[2]*s,z=-p[0]*s+p[2]*c,y=p[1];c=Math.cos(tilt);s=Math.sin(tilt);return[x,y*c-z*s,y*s+z*c]};
+const irot3=v=>{let c=Math.cos(tilt),s=Math.sin(tilt);const y=v[1]*c+v[2]*s,z=-v[1]*s+v[2]*c,x=v[0];c=Math.cos(yaw);s=Math.sin(yaw);return[x*c-z*s,y,x*s+z*c]};
+const slerp=(A,B,t)=>{const w=Math.acos(cl(dot(A,B)));if(w<1e-6)return A;const s=Math.sin(w),a=Math.sin((1-t)*w)/s,b=Math.sin(t*w)/s;return A.map((e,i)=>a*e+b*B[i])};
+const ang2=(P,Q,R)=>{const a=[Q[0]-P[0],Q[1]-P[1]],b=[R[0]-P[0],R[1]-P[1]];return Math.acos(cl((a[0]*b[0]+a[1]*b[1])/Math.hypot(...a)/Math.hypot(...b)))/D};
+const ang3=(A,B,Cc)=>{const t=X=>{const d=dot(A,X),v=[X[0]-d*A[0],X[1]-d*A[1],X[2]-d*A[2]],l=Math.hypot(...v);return v.map(e=>e/l)};return Math.acos(cl(dot(t(B),t(Cc))))/D};
+function geo(a,b){let A=a,B=b;if(Math.hypot(...A)<1e-4){A=b;B=a}const q=Math.hypot(...A);
+ if(q<1e-4||Math.abs(a[0]*b[1]-a[1]*b[0])<1e-5)return{l:1};
+ const m=q*q,Q=[A[0]/m,A[1]/m],ax=A[0],ay=A[1],bx=B[0],by=B[1],qx=Q[0],qy=Q[1];
+ const d=2*(ax*(by-qy)+bx*(qy-ay)+qx*(ay-by));
+ const ux=((ax*ax+ay*ay)*(by-qy)+(bx*bx+by*by)*(qy-ay)+(qx*qx+qy*qy)*(ay-by))/d;
+ const uy=((ax*ax+ay*ay)*(qx-bx)+(bx*bx+by*by)*(ax-qx)+(qx*qx+qy*qy)*(bx-ax))/d;
+ return{o:[ux,uy],R:Math.hypot(ax-ux,ay-uy)}}
+function edgeM(a,b){const g=geo(a,b),N=40;
+ if(g.l)return Array.from({length:N+1},(_,i)=>[a[0]+(b[0]-a[0])*i/N,a[1]+(b[1]-a[1])*i/N]);
+ const t1=Math.atan2(a[1]-g.o[1],a[0]-g.o[0]),t2=Math.atan2(b[1]-g.o[1],b[0]-g.o[0]);let d=t2-t1;
+ while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+ return Array.from({length:N+1},(_,i)=>{const t=t1+d*i/N;return[g.o[0]+g.R*Math.cos(t),g.o[1]+g.R*Math.sin(t)]})}
+function tg(a,b){const g=geo(a,b);if(g.l)return[b[0]-a[0],b[1]-a[1]];let t=[-(a[1]-g.o[1]),a[0]-g.o[0]];const e=edgeM(a,b);
+ if(t[0]*(e[1][0]-e[0][0])+t[1]*(e[1][1]-e[0][1])<0)t=[-t[0],-t[1]];return t}
+const angH=(a,b,c)=>{const u=tg(a,b),v=tg(a,c);return Math.acos(cl((u[0]*v[0]+u[1]*v[1])/Math.hypot(...u)/Math.hypot(...v)))/D};
+
+function resize(){S=Math.min(cv.parentElement.clientWidth-32,540);dpr=window.devicePixelRatio||1;cv.style.width=cv.style.height=S+'px';cv.width=cv.height=S*dpr;k=S*.44;cx=cy=S/2;draw()}
+function line(pts,col,w,dash){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=col;ctx.lineWidth=w;ctx.setLineDash(dash||[]);ctx.stroke();ctx.setLineDash([])}
+function poly3(pts,col,w){for(let i=0;i<pts.length-1;i++){const a=rot3(pts[i]),b=rot3(pts[i+1]),vis=a[2]+b[2]>0;
+ ctx.beginPath();ctx.moveTo(cx+k*a[0],cy-k*a[1]);ctx.lineTo(cx+k*b[0],cy-k*b[1]);ctx.strokeStyle=col;ctx.globalAlpha=vis?1:.2;ctx.lineWidth=w;ctx.stroke()}ctx.globalAlpha=1}
+function dotAt(x,y,col,r,lab){ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=col;ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+ if(lab){ctx.fillStyle='#fff';ctx.font='700 12px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(lab,x,y+.5)}}
+function paintTri(sc,vis,ep,ang,col){
+ for(let i=0;i<3;i++){if(!vis[i])continue;const[x,y]=sc[i],p1=ep(i,(i+1)%3)[1],p2=ep(i,(i+2)%3)[1];
+  const a1=Math.atan2(p1[1]-y,p1[0]-x),a2=Math.atan2(p2[1]-y,p2[0]-x);let d=a2-a1;
+  while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+  ctx.beginPath();ctx.moveTo(x,y);ctx.arc(x,y,24,a1,a1+d,d<0);ctx.closePath();ctx.fillStyle=col+'66';ctx.fill();
+  const m=a1+d/2;ctx.fillStyle=C.fg;ctx.font='600 13px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(ang[i].toFixed(1)+'°',x+Math.cos(m)*46,y+Math.sin(m)*46)}
+ sc.forEach((p,i)=>{if(vis[i])dotAt(p[0],p[1],col,10,'ABC'[i])})}
+function fillPoly(pts){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fillStyle=C.tri;ctx.fill()}
+
+function drawE(){
+ ctx.strokeStyle=C.ln;ctx.lineWidth=1;
+ for(let i=-6;i<=6;i++){ctx.beginPath();ctx.moveTo(cx+i*k/5,0);ctx.lineTo(cx+i*k/5,S);ctx.moveTo(0,cy+i*k/5);ctx.lineTo(S,cy+i*k/5);ctx.stroke()}
+ if(mode==='t'){const sc=Eu.map(T),ep=(i,j)=>[sc[i],sc[j]];
+  fillPoly(sc);line([...sc,sc[0]],C.e,3);
+  const a=[ang2(Eu[0],Eu[1],Eu[2]),ang2(Eu[1],Eu[2],Eu[0]),ang2(Eu[2],Eu[0],Eu[1])];
+  paintTri(sc,[1,1,1],ep,a,C.e);res={ang:a,sum:a[0]+a[1]+a[2]};
+ }else{const P=[0,.25],y0=-.35,t=th*D,d=[Math.cos(t),Math.sin(t)];
+  line([T([-3,y0]),T([3,y0])],C.fg,3);line([T([P[0]-3*d[0],P[1]-3*d[1]]),T([P[0]+3*d[0],P[1]+3*d[1]])],C.e,3);
+  const par=Math.abs(Math.sin(t))<.0087;let msg;
+  if(par)msg='✅ Қиылыспайды! Бұл — Евклид геометриясындағы <b>жалғыз</b> параллель.';
+  else{const tt=(y0-P[1])/d[1],x=P[0]+tt*d[0];
+   if(Math.abs(x)<1.5){const q=T([x,y0]);dotAt(q[0],q[1],'#ef4444',7)}
+   msg='❌ m түзуі l-мен қиылысады.'}
+  const q=T(P);dotAt(q[0],q[1],C.acc,9,'P');ctx.fillStyle=C.fg;ctx.font='700 14px system-ui';ctx.textAlign='left';ctx.fillText('l',12,T([0,y0])[1]-10);
+  res={msg:msg+'<div class="small">Жалғыз бағыт: m ∥ l (θ = 0° немесе 180°). Басқа бағыттардың бәрі l-ді қиып өтеді.</div>'}}}
+
+let HP=[0,.2];
+function mG(t){const d=[Math.cos(t*D),Math.sin(t*D)],n=[-d[1],d[0]],Pn=HP[0]*n[0]+HP[1]*n[1];
+ if(Math.abs(Pn)<1e-6)return{l:1,d,ends:[t*D,t*D+Math.PI]};
+ const s=(1-(HP[0]**2+HP[1]**2))/(2*Pn),Q=[HP[0]+s*n[0],HP[1]+s*n[1]],c=Math.hypot(...Q),f=Math.atan2(Q[1],Q[0]),h=Math.acos(1/c);
+ return{o:Q,R:Math.abs(s),ends:[f-h,f+h]}}
+function inter(t){const g=mG(t);let lo=nm(-150*D),hi=nm(-30*D);if(lo>hi)[lo,hi]=[hi,lo];
+ return g.ends.filter(e=>{e=nm(e);return e>lo&&e<hi}).length===1}
+function nearLim(t){const g=mG(t);let m=99;[-150*D,-30*D].forEach(a=>g.ends.forEach(e=>{let d=Math.abs(nm(e)-nm(a));d=Math.min(d,2*Math.PI-d);m=Math.min(m,d/D)}));return m}
+function circ(o,R,col,w){const pts=Array.from({length:241},(_,i)=>T([o[0]+R*Math.cos(i*Math.PI/120),o[1]+R*Math.sin(i*Math.PI/120)]));line(pts,col,w)}
+function drawH(){
+ ctx.beginPath();ctx.arc(cx,cy,k,0,7);ctx.fillStyle=C.card;ctx.fill();
+ ctx.save();ctx.beginPath();ctx.arc(cx,cy,k,0,7);ctx.clip();
+ for(let i=0;i<6;i++){const a=i*Math.PI/6;line([T([-Math.cos(a),-Math.sin(a)]),T([Math.cos(a),Math.sin(a)])],C.ln,1)}
+ [.3,.6,.85].forEach(r=>circ([0,0],r,C.ln,1));
+ if(mode==='t'){const ep=(i,j)=>edgeM(Hy[i],Hy[j]).map(T),sc=Hy.map(T);
+  const poly=[...ep(0,1),...ep(1,2),...ep(2,0)];fillPoly(poly);line([...poly,poly[0]],C.h,3);
+  const a=[angH(Hy[0],Hy[1],Hy[2]),angH(Hy[1],Hy[2],Hy[0]),angH(Hy[2],Hy[0],Hy[1])];
+  ctx.restore();ctx.save();paintTri(sc,[1,1,1],ep,a,C.h);ctx.restore();res={ang:a,sum:a[0]+a[1]+a[2]};
+ }else{const g=mG(th);circ([0,-2],Math.sqrt(3),C.fg,3);
+  const hit=inter(th);
+  if(g.l)line([T([-Math.cos(th*D),-Math.sin(th*D)]),T([Math.cos(th*D),Math.sin(th*D)])],C.h,3);else circ(g.o,g.R,C.h,3);
+  ctx.restore();
+  const q=T(HP);dotAt(q[0],q[1],C.acc,9,'P');ctx.fillStyle=C.fg;ctx.font='700 14px system-ui';ctx.textAlign='center';ctx.fillText('l',T([0,-.2])[0],T([0,-.2])[1]+0);
+  let cnt=0;for(let t=0;t<180;t+=.25)if(!inter(t))cnt++;cnt*=.25;
+  const nl=nearLim(th);
+  let msg=hit?'❌ m түзуі l-мен қиылысады.':(nl<1.5?'✅ Қиылыспайды — <b>шектік (асимптоталық) параллель</b>: l-ге шексіздікте «жанасады».':'✅ Қиылыспайды — бұл да l-ге параллель!');
+  res={msg:msg+`<div class="small">P арқылы өтетін, l-мен қиылыспайтын бағыттар аралығы ≈ <b>${(cnt).toFixed(0)}°</b> (180°-тан). Бұл аралықтағы әр бағыт — жеке параллель, яғни олар <b>шексіз көп</b>.</div>`}}
+ ctx.beginPath();ctx.arc(cx,cy,k,0,7);ctx.strokeStyle=C.h;ctx.lineWidth=3;ctx.stroke()}
+
+function drawS(){
+ ctx.beginPath();ctx.arc(cx,cy,k,0,7);ctx.fillStyle=C.card;ctx.fill();
+ for(let lo=0;lo<180;lo+=30)poly3(Array.from({length:73},(_,i)=>{const la=-90+i*2.5;return ll(lo,la)}).concat(Array.from({length:73},(_,i)=>ll(lo+180,90-i*2.5))),C.ln,1);
+ for(let la=-60;la<=60;la+=30)poly3(Array.from({length:73},(_,i)=>ll(i*5,la)),la?C.ln:C.fg,la?1:2.5);
+ ctx.beginPath();ctx.arc(cx,cy,k,0,7);ctx.strokeStyle=C.s;ctx.lineWidth=3;ctx.stroke();
+ if(mode==='t'){const sc=Sp.map(p=>{const q=rot3(p);return[cx+k*q[0],cy-k*q[1],q[2]]}),vis=sc.map(p=>p[2]>0);
+  const samp=(i,j)=>Array.from({length:41},(_,t)=>slerp(Sp[i],Sp[j],t/40)),ep=(i,j)=>samp(i,j).map(p=>{const q=rot3(p);return[cx+k*q[0],cy-k*q[1],q[2]]});
+  const all=[...ep(0,1),...ep(1,2),...ep(2,0)];if(all.every(p=>p[2]>0))fillPoly(all);
+  [[0,1],[1,2],[2,0]].forEach(([i,j])=>poly3(samp(i,j),C.s,3.5));
+  const a=[ang3(Sp[0],Sp[1],Sp[2]),ang3(Sp[1],Sp[2],Sp[0]),ang3(Sp[2],Sp[0],Sp[1])];
+  paintTri(sc,vis,ep,a,C.s);res={ang:a,sum:a[0]+a[1]+a[2]};
+ }else{const la=40*D,P=[0,Math.sin(la),Math.cos(la)],N=[0,Math.cos(la),-Math.sin(la)],t=th*D;
+  const Tn=[Math.cos(t),Math.sin(t)*N[1],Math.sin(t)*N[2]];
+  poly3(Array.from({length:73},(_,i)=>ll(i*5,0)),C.fg,3.5);
+  poly3(Array.from({length:73},(_,i)=>{const u=i*5*D;return P.map((e,c)=>e*Math.cos(u)+Tn[c]*Math.sin(u))}),C.s,3.5);
+  let I=cr(cr(P,Tn),[0,1,0]);const l=Math.hypot(...I);I=I.map(e=>e/l);
+  [I,I.map(e=>-e)].forEach(p=>{const q=rot3(p);ctx.globalAlpha=q[2]>0?1:.3;dotAt(cx+k*q[0],cy-k*q[1],'#ef4444',7);ctx.globalAlpha=1});
+  const q=rot3(P);ctx.globalAlpha=q[2]>0?1:.3;dotAt(cx+k*q[0],cy-k*q[1],C.acc,9,'P');ctx.globalAlpha=1;
+  res={msg:'❌ Екі үлкен шеңбер әрқашан <b>екі нүктеде</b> қиылысады (қызыл нүктелер, бір-біріне диаметральді қарама-қарсы).<div class="small">Слайдермен бағытты қалай бұрсаң да, l (экватор) пен m қиылысады. Демек, сферада <b>параллель түзулер жоқ</b>. Глобусты айналдырып, екінші нүктені тап.</div>'}}}
+
+const WT={e:['Евклид планетасы','Б.з.д. шамамен 300 ж. Евклид «Бастамаларында» 5-постулатты берді: түзуден тыс нүкте арқылы онымен қиылыспайтын <b>бір ғана</b> түзу жүргізуге болады. Бұл — бізге үйреншікті жазық әлем.'],
+h:['Лобачevский–Бойяи планетасы','Н. Лобачевский (1826 жылғы баяндама, 1829 жылы жарияланды, Қазан) және Я. Бойяи (1832) 5-постулатты жоққа шығарып, қайшылықсыз геометрия құрды: P арқылы <b>шексіз көп</b> параллель өтеді. Көрнекі модель — Пуанкаре дискі (кейін ұсынылған): «түзулер» — шекара шеңберіне перпендикуляр доғалар. Шетке жақындаған сайын үшбұрыш «жіңішкереді», бұрыштар кішірейеді.'],
+s:['Риман планетасы','Б. Риман (1854, Гёттинген университетіндегі лекция) кеңістіктің қисықтығы идеясын енгізді. Сферада «түзулер» — үлкен шеңберлер, олар әрқашан қиылысады, сондықтан <b>параллель жоқ</b>. Үшбұрыштың бұрыштар қосындысы 180°-тан артық, ал артығы (ε) үшбұрыштың ауданын береді.']};
+WT.h[0]='Лобачевский–Бойяи планетасы';
+
+function draw(){
+ C={fg:V('--fg'),ln:V('--ln'),card:V('--card'),e:V('--e'),h:V('--h'),s:V('--s'),tri:V('--tri'),acc:V('--acc')};
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,S,S);
+ ({e:drawE,h:drawH,s:drawS})[world]();panel()}
+
+function panel(){const el=$('read');
+ document.querySelectorAll('[data-w]').forEach(x=>{if(x.tagName==='TD'||x.tagName==='TH')x.classList.toggle('on',x.dataset.w===world)});
+ $('story').innerHTML='<b>'+WT[world][0]+'</b><br>'+WT[world][1];
+ if(mode==='t'){const s=res.sum,dv=s-180,col=C[world];meas[world]=s;$('m-'+world).textContent=s.toFixed(1)+'°';
+  let v,ex='';
+  if(world==='e')v='Қосынды 180°-қа тең (дәлдік шегінде). Төбелерді қалай сүйресең де өзгермейді.';
+  if(world==='h'){v=`180°-тан <b>кем</b>: ақау δ = ${(-dv).toFixed(1)}°`;ex=`Ауданы S = π − (A+B+C) = ${(-dv*D).toFixed(3)} (K = −1). Үшбұрыш үлкейген сайын қосынды 0°-қа ұмтылады.`}
+  if(world==='s'){v=`180°-тан <b>артық</b>: ε = ${dv.toFixed(1)}°`;ex=`Бірлік сферада S = ε = ${(dv*D).toFixed(3)} рад. Егер сфера — Жер (R = 6371 км): S ≈ ${(dv*D*6371*6371/1e6).toFixed(1)} млн км².`}
+  el.innerHTML=`<div class="chips">${res.ang.map((a,i)=>`<span class="chip" style="border-color:${col}">${'ABC'[i]} = ${a.toFixed(1)}°</span>`).join('')}</div><div class="small">A + B + C =</div><div class="sum" style="color:${col}">${s.toFixed(1)}°</div><div class="verdict">${v}</div><div class="small" style="margin-top:6px">${ex}</div>`;
+ }else el.innerHTML='<div class="small">Параллель іздеу</div><div style="margin:6px 0">'+res.msg+'</div>';
+ $('thv').textContent='θ = '+th.toFixed(1)+'°'}
+
+function setHint(){$('hint').textContent=mode==='p'?(world==='s'?'Глобусты тартып айналдыр. Слайдер m бағытын өзгертеді.':'Слайдермен m түзуін бұр.'):world==='s'?'Төбені тарт: A, B, C. Бос жерді тартсаң, глобус айналады.':'A, B, C төбелерін сүйре.';
+ $('sl').classList.toggle('hide',mode!=='p');$('oct').classList.toggle('hide',!(world==='s'&&mode==='t'))}
+document.querySelectorAll('button[data-w]').forEach(b=>b.onclick=()=>{world=b.dataset.w;document.querySelectorAll('button[data-w]').forEach(x=>x.classList.toggle('on',x===b));setHint();draw()});
+document.querySelectorAll('button[data-m]').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('button[data-m]').forEach(x=>x.classList.toggle('on',x===b));setHint();draw()});
+$('th').oninput=e=>{th=+e.target.value;draw()};
+$('reset').onclick=()=>{Eu=Eu0.map(a=>a.slice());Hy=Hy0.map(a=>a.slice());Sp=Sp0();yaw=0;tilt=.35;draw()};
+$('oct').onclick=()=>{Sp=[[0,1,0],[0,0,1],[1,0,0]];yaw=-.6;tilt=.5;draw()};
+
+function pos(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*S/r.width,(e.clientY-r.top)*S/r.height]}
+cv.addEventListener('pointerdown',e=>{const[X,Y]=pos(e);lx=X;ly=Y;drag=-1;rotating=false;
+ if(mode==='t'){const pts=world==='e'?Eu.map(T):world==='h'?Hy.map(T):Sp.map(p=>{const q=rot3(p);return[cx+k*q[0],cy-k*q[1],q[2]]});
+  pts.forEach((p,i)=>{if((world!=='s'||p[2]>0)&&Math.hypot(p[0]-X,p[1]-Y)<24)drag=i})}
+ if(drag<0&&world==='s')rotating=true;cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',e=>{if(drag<0&&!rotating)return;const[X,Y]=pos(e);
+ if(rotating){yaw-=(X-lx)*.012;tilt=Math.max(-1.3,Math.min(1.3,tilt+(Y-ly)*.012));lx=X;ly=Y;draw();return}
+ const u=U(X,Y);
+ if(world==='e')Eu[drag]=[Math.max(-1.2,Math.min(1.2,u[0])),Math.max(-1.2,Math.min(1.2,u[1]))];
+ else if(world==='h'){const r=Math.hypot(...u),m=Math.min(r,.985)/(r||1);Hy[drag]=[u[0]*m,u[1]*m]}
+ else{let r2=u[0]**2+u[1]**2;if(r2>=1){const r=Math.sqrt(r2);u[0]/=r;u[1]/=r;r2=1}const v=[u[0],u[1],Math.sqrt(Math.max(0,1-r2))];Sp[drag]=irot3(v)}
+ draw()});
+['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>{drag=-1;rotating=false}));
+window.addEventListener('resize',resize);
+setHint();resize();
+</script></body></html>
